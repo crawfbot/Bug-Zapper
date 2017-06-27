@@ -1,0 +1,65 @@
+﻿@using Microsoft.AspNet.Identity
+@using BugTracker.Models
+
+<!-- **********************************************************************************************************************************************************
+    MAIN SIDEBAR MENU
+    *********************************************************************************************************************************************************** -->
+<!--sidebar start-->
+
+<aside>
+    <div id="sidebar" class="nav-collapse ">
+        <!-- sidebar menu start-->
+        <ul class="sidebar-menu" id="nav-accordion">
+
+            
+
+            <p class="centered"><img src="~/Media/bolt-icon.jpg" class="img-circle" width="60"></p>
+
+          
+
+                <h5 class="centered">Hello, Guest!</h5>
+
+            
+
+
+
+            <li class="mt">
+                <a href=@Url.Action("Dashboard", "Home")>
+                    <i class="fa fa-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+
+            <li>
+                <a href=@Url.Action("Index", "Projects")>
+                    <i class="fa fa-cogs"></i>
+                    <span>Projects </span>
+                    @*<span class="label label-theme pull-right mail-info">2</span>*@
+                </a>
+            </li>
+
+            <li>
+                <a href=@Url.Action("Index", "Tickets")>
+                    <i class="fa fa-ticket"></i>
+                    <span>Tickets </span>
+                    @*<span class="label label-theme pull-right mail-info">2</span>*@
+                </a>
+            </li>
+
+            <li>
+                <a href=@Url.Action("Index", "TicketNotifications")>
+                    <i class="fa fa-bell-o"></i>
+                    <span>Notifications </span>
+                    @*<span class="label label-theme pull-right mail-info">2</span>*@
+                </a>
+            </li>
+
+
+
+        </ul>
+        <!-- sidebar menu end-->
+    </div>
+</aside>
+
+
+<!--sidebar end-->

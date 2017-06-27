@@ -1,0 +1,96 @@
+﻿
+@model IEnumerable<BugTracker.Models.ApplicationUser>
+@using BugTracker.Helpers;
+
+@{
+    ViewBag.Title = "Users";
+}
+
+
+<section>
+    <section class="wrapper">
+        <h3>Manage User Assignments <i class="fa fa-angle-right"></i></h3>
+        <div class="row mb ml">
+
+            <!-- page start-->
+            <div class="content-panel" style="color: black;">
+                <div class="adv-table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="DTable display table table-bordered" id="hidden-table-info">
+
+
+
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Actions</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var user in Model)
+                            {
+                                var userName = user.Email;
+                                UserRolesHelper helper = new UserRolesHelper();
+                                var userRoles = helper.ListUserRoles(user.Id);
+
+                                <tr class="gradeA">
+
+                                    <td>@user.DisplayName</td>
+                                    <td>@user.Email</td>
+
+                                    <td>
+                                        @foreach (var role in userRoles)
+                                        {
+
+                                            var roleName = role.ToString();
+                                            if (roleName == "Admin")
+                                            {
+                                                roleName = "Administrator";
+                                            }
+                                            else if (roleName == "Project Manager")
+                                            {
+                                                roleName = "Project Manager";
+                                            }
+                                            else if (roleName == "Developer")
+                                            {
+                                                roleName = "Developer";
+                                            }
+                                            else
+                                            {
+                                                roleName = "Submitter";
+                                            }
+
+                                            <span class=""><i class=""></i><b>@roleName</b></span>
+
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Manage Roles", "EditUsersInRole", new { id = user.Id }, new { @class = "btn btn-default" })
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                </div>
+                <!-- page end-->
+
+
+            </div><!-- /row -->
+
+        </section><! --/wrapper -->
+    </section><!-- /MAIN CONTENT -->
+
+
+
+    @section scripts {
+
+        <script>
+            $('.DTable').DataTable();
+        </script>
+
+    }

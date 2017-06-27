@@ -1,0 +1,390 @@
+﻿@model BugTracker.Models.Ticket
+@using Microsoft.AspNet.Identity;
+
+@using BugTracker.Helpers
+
+@{
+    ViewBag.Title = "Ticket Details";
+}
+
+
+<section class="wrapper">
+    <h3><i class="fa fa-angle-right"></i> @Html.DisplayFor(model => model.Title)</h3>
+    <div class="row mt">
+        <div class="col-lg-12">
+
+            <div class="content-panel">
+                <h4 style="color: black; font-weight: bold;">
+                    Description <i class="fa fa-angle-right"></i>
+                    <small style="color: #323232;">"@Html.DisplayFor(model => model.Description)"</small>
+                </h4>
+
+                <section id="unseen">
+
+                    <table class="table table-bordered table-striped table-condensed tableText">
+                        <thead>
+
+                            <tr>
+                                <th>Project</th>
+                                <th>Type</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Assignee(s)</th>
+                                <th>Submitted By</th>
+                                <th>Last Modified</th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+
+                            <tr>
+                                <td>@Html.DisplayFor(model => model.Project.Name)</td>
+                                <td>@Html.DisplayFor(model => model.TicketType.Name)</td>
+                                <td>@Html.DisplayFor(model => model.TicketPriority.Name)</td>
+                                <td>@Html.DisplayFor(model => model.TicketStatus.Name)</td>
+
+                                <td>
+                                    @if (Model.AssignedToUserId == null)
+                                    {
+                                        @Html.Label("Unassigned")
+                                    }
+                                    else
+                                    {
+
+                                        @UserHelper.GetDisplayNameFromId(Model.AssignedToUserId)
+                                    }
+                                </td>
+
+
+                                <td>
+                                    @UserHelper.GetDisplayNameFromId(Model.OwnerUserId)<br /> on
+                                    @Html.DisplayFor(model => model.Created)
+                                </td>
+                                <td>@Html.DisplayFor(model => model.Updated)</td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </section>
+                <p>
+                    @Html.ActionLink("Back to Tickets List", "Index", null, new { @class = "btn tableBtn btn-default" })
+                    @Html.ActionLink("Edit This Ticket", "Edit", new { id = Model.Id }, new { @class = "btn tableBtn btn-default" })
+                </p>
+            </div><!-- /content-panel -->
+
+        </div><!-- /col-lg-4 -->
+    </div><!-- /row -->
+    <!--BEGIN COMMENTS -->
+    <h3><i class="fa fa-angle-right"></i> Comments:</h3>
+    <div class="row mt">
+        <div class="col-lg-12">
+
+            <div class="content-panel">
+
+                <section id="unseen">
+
+                    <table class="table table-bordered table-striped table-condensed tableText">
+                        <thead>
+
+                            <tr>
+                                <th>Comment</th>
+                                <th>Submitted By</th>
+
+
+                            </tr>
+
+                        </thead>
+                        <tbody>
+
+                            @foreach (var comment in Model.TicketComments.Reverse())
+                            {
+                                <tr>
+                                    <td>
+                                        @*@Html.DisplayFor(model => comment.Comment)*@
+
+                                        <p>@Html.Raw(comment.Body)</p>
+
+                                    </td>
+                                    <td>
+
+                                        @UserHelper.GetDisplayNameFromId(comment.UserId)
+                                        on
+                                        @Html.DisplayFor(model => comment.Created)
+                                        <br />
+                                        <div class="btn-group btn-group-xs">
+                                            @Html.ActionLink("Edit", "Edit", "TicketComments", new { id = comment.Id }, new { @class = "btn tableBtn btn-default" })
+                                            @Html.ActionLink("Details", "Details", "TicketComments", new { id = comment.Id }, new { @class = "btn tableBtn btn-default" })
+                                            @Html.ActionLink("Delete", "Delete", "TicketComments", new { id = comment.Id }, new { @class = "btn tableBtn btn-default" })
+                                        </div>
+
+                                    </td>
+                                </tr>
+                            }
+
+                            @using (Html.BeginForm("Create", "TicketComments", FormMethod.Post))
+                            {
+                                <tr class="tickettable">
+                                    <td class="ttcell">
+                                        @Html.AntiForgeryToken()
+
+                                        @Html.Hidden("TicketId", Model.Id)
+
+                                        @*@Html.TextArea("Comment")*@
+
+                                        <div>
+                                            <input class="cr" rows="2" id="Body" name="Body" />
+
+                                            <button class="btn btn-success btn-block" type="submit" style="margin-top: 5px;">Add Comment</button>
+
+                                        </div>
+                                    </td>
+
+                                    <td class="ttcell">
+                                        <div style="max-height: 260px; margin: auto;">
+                                            <img src="~/Media/commenticon.png" style="display: block; margin: auto; max-height: 260px;" />
+                                        </div>
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+
+
+
+                </section>
+            </div><!-- /content-panel -->
+
+        </div><!-- /col-lg-4 -->
+    </div><!-- /row -->
+    <!--BEGIN History Log -->
+    <h3><i class="fa fa-angle-right"></i> History Log:</h3>
+    <div class="row mb ml">
+
+        <!-- page start-->
+        <div class="content-panel tableText">
+            <div class="adv-table">
+                <table cellpadding="0" cellspacing="0" border="0" class="DTable display table table-bordered tableText" id="hidden-table-info">
+
+                    <thead>
+                        <tr>
+                            <th>Property</th>
+                            <th>Old Value</th>
+                            <th>New Value</th>
+                            <th>Changed By</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var historylog in Model.TicketHistoryLogs.Reverse())
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(model => historylog.PropertyChanged)
+                                    
+                                
+                                </td>
+                                <td>
+                                    @*@Html.DisplayFor(model => historylog.OldValue)
+                                    <br />*@
+                                    @TicketHistoryHelper.SorterOld(historylog.Id)
+                                </td>
+                                <td>
+                                @TicketHistoryHelper.SorterNew(historylog.Id)
+                                @*@Html.DisplayFor(model => historylog.NewValue)*@
+                                </td>
+                                <td>
+
+
+
+                                    @UserHelper.GetDisplayNameFromId(historylog.UserId)
+                                    <span>on</span>
+                                    @Html.DisplayFor(model => historylog.DateChanged)
+
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- page end-->
+
+
+    </div><!-- /row -->
+    <!--BEGIN Ticket Attachments -->
+    <h3><i class="fa fa-angle-right"></i> Attachments:</h3>
+    <div class="row mt">
+        <div class="col-lg-12">
+
+            <div class="content-panel">
+
+                <section id="unseen">
+
+                    <table class="table table-bordered table-striped table-condensed tableText tickettable">
+                        <thead>
+
+                            <tr>
+                                <th>
+                                    @Html.DisplayName("Attachment")
+                                </th>
+                                <th>
+                                    @Html.DisplayName("Description")
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var attachment in Model.TicketAttachments.Reverse())
+                            {
+                                <tr>
+
+                                    <td>
+                                        <div style="display:block; margin: auto;">
+                                            @if (attachment.FilePath != null) // Can Create Static Helper Method for the below if need be. Can also create pdf and docx icon for a click download.
+                                            {
+                                                if (attachment.FilePath.Contains(".pdf") || attachment.FilePath.Contains(".txt"))
+                                                {
+                                                    <a href="@Url.Content(attachment.FilePath)" target="_blank"><img src="~/Media/crossDoc.png" class="file-img" style="display:block; margin: auto;" /></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Content(attachment.FilePath)" target="_blank"><img src="@Url.Content(attachment.FilePath)" class="img-responsive" style="max-width: 150px; display:block; margin: auto;" /></a>
+                                                }
+                                            }
+                                        </div>
+                                    </td>
+
+                                    <td>
+                                        @Html.DisplayFor(model => attachment.Description)
+                                    </td>
+
+                                </tr>
+
+                            }
+                            <!--FINISH FORMATTING -->
+
+                            <tr class="tickettable">
+                                <td class="uploadcell">
+
+
+                                    @*@if (User.IsInRole("Admin") || User.IsInRole("Project Manager"))
+                                    {*@
+                                        <div class="upload">
+                                            <small>Acceptable Formats Include: (.pdf), (.png), (.jpg), (.txt).</small>
+                                            @using (Html.BeginForm("AttachFile", "Tickets", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.ValidationSummary();
+                                                @ViewBag.AttachmentMessage
+                                                <div class="uinner">
+                                                    <input type="hidden" name="TicketId" value="@Model.Id" />
+                                                    <span class="field-validation-error" id="spanfile"></span>
+                                                    <input type="file" id="uinput" name="file" />
+                                                    <br />
+                                                    <input type="submit" class="btn btn-success btn-block" value="Upload" />
+                                                </div>
+                                            }
+                                        </div>
+                                    @*}
+                                    else if (User.IsInRole("Developer") && Model.AssignedToUserId == User.Identity.GetUserId())
+                                    {
+                                        <div>
+                                            <small>Acceptable Formats Include: (.pdf), (.png), (.jpg), (.txt).</small>
+                                            @using (Html.BeginForm("AttachFile", "Tickets", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.ValidationSummary();
+                                                @ViewBag.AttachmentMessage
+                                                <ol>
+                                                    <li class="lifile">
+                                                        <input type="hidden" name="TicketId" value="@Model.Id" />
+                                                        <span class="btn btn-default btn-file">
+                                                            Browse <input type="file" id="fileToUpload" name="file">
+                                                        </span>
+                                                        <span class="field-validation-error" id="spanfile"></span>
+                                                    </li>
+                                                </ol>
+                                                <input type="submit" id="btnSubmit" value="Upload" />
+                                            }
+                                        </div>
+                                    }
+                                    else if (User.IsInRole("Submitter") && !User.IsInRole("Developer"))
+                                    {
+                                        <div>
+                                            <small>Acceptable Formats Include: (.pdf), (.png), (.jpg), (.txt).</small>
+                                            @using (Html.BeginForm("AttachFile", "Tickets", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                            {
+                                                @Html.ValidationSummary();
+                                                @ViewBag.AttachmentMessage
+                                                <ol>
+                                                    <li class="lifile">
+                                                        <input type="hidden" name="TicketId" value="@Model.Id" />
+                                                        <span class="btn btn-default btn-file">
+                                                            Browse <input type="file" id="fileToUpload" name="file">
+                                                        </span>
+                                                        <span class="field-validation-error" id="spanfile"></span>
+                                                    </li>
+                                                </ol>
+                                                <input type="submit" id="btnSubmit" value="Upload" />
+                                            }
+                                        </div>
+                                    }*@
+                                </td>
+
+                                <td class="uploadcell"></td>
+
+                            </tr>
+                            <!--FINISH FORMATTING -->
+
+                        </tbody>
+                    </table>
+
+
+
+
+                </section>
+            </div><!-- /content-panel -->
+
+        </div><!-- /col-lg-4 -->
+    </div><!-- /row -->
+
+</section><! --/wrapper -->
+
+
+@section Scripts {
+    <script src="~/Scripts/tinymce/tinymce.js"></script>
+    <script src="~/Scripts/tinymce/jquery.tinymce.min.js"></script>
+    <script>
+        $(function () {
+            $('.cr').tinymce({});
+        })
+    </script>
+    <script>
+        $('.DTable').DataTable();
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

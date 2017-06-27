@@ -1,0 +1,31 @@
+﻿@model BugTracker.Models.AdminCustomView
+@{
+    ViewBag.Title = "EditUserRoles";
+}
+
+<section class="wrapper">
+
+    <b style="padding: 15px;">Assign Roles to @Model.User.DisplayName</b>
+
+    @using (Html.BeginForm())
+            {
+        @Html.AntiForgeryToken()
+
+        <div class="col-sm-12" style="padding-top: 15px;">
+            <div class="form-group">
+                @*@Html.LabelFor(m => m.Roles, "Roles for " + @Model.User.FirstName, new { @class = "col-sm-6 text-right control-label" })*@
+                @Html.ListBox("SelectedRoles", Model.Roles, new { @id = "multi-select-box", @class = "col-sm-6 tableText", multiple = "multiple" })
+            </div>
+        </div>
+        
+        <div class="col-sm-12" style="padding-top:15px;">
+            <div class="tableText form-group">
+                <input type="submit" value="Assign Roles" class="btn btn-success"/>
+                
+                <div style="padding-top: 15px;"> @Html.ActionLink("Cancel", "EditUsers", null, new { @class = "btn btn-danger" }) </div>
+            </div>
+        </div>
+
+    }
+
+</section>

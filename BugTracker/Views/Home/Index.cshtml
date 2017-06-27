@@ -1,0 +1,67 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div style="padding-top: 75px;">
+
+    <img src="~/Media/lightningboltbz.png" class="hvr-pulse img-responsive" />
+
+    <div>
+
+        @*<h2 style="color: #ff9900;">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+            Pardon Our Mess! Application Still Under Construction!
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+        </h2>*@
+
+    </div>
+
+    <div class="col-lg-10" id="demoRoles">
+
+        
+
+        <h3>Demo Application As:</h3>
+
+        <p>
+            @using (Html.BeginForm("LoginGuestSubmitter", "Account"))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-block">Submitter</button>
+            }
+            <br />
+            @using (Html.BeginForm("LoginGuestDeveloper", "Account"))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-block">Developer</button>
+            }
+            <br />
+            @using (Html.BeginForm("LoginGuestProjectManager", "Account"))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-block">Project Manager</button>
+            }
+            <br />
+            @using (Html.BeginForm("LoginGuestAdmin", "Account"))
+            {
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn btn-block">Administrator</button>
+            }
+        </p>
+    </div>
+</div>
+
+@*<div class="row">
+    <div class="col-md-4">
+        <h2></h2>
+
+        
+    </div>
+    <div class="col-md-4">
+        <h2></h2>
+
+    </div>
+    <div class="col-md-4">
+        <h2></h2>
+
+    </div>
+</div>*@

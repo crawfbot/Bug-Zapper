@@ -1,0 +1,85 @@
+﻿@model IEnumerable<BugTracker.Models.TicketNotification>
+@using BugTracker.Helpers
+
+@{
+    ViewBag.Title = "Notifications";
+}
+
+<section>
+    <section class="wrapper">
+        <h3>Notifications <i class="fa fa-angle-right"></i> </h3>
+        <div class="row mb ml">
+
+            <!-- page start-->
+            <div class="content-panel" style="color: black;">
+                <div class="adv-table">
+                    <table cellpadding="0" cellspacing="0" border="0" class="DTable display table table-bordered" id="hidden-table-info">
+
+                        <thead>
+                            <tr>
+                                
+                                <th>Ticket</th>
+
+                                <th>Property</th>
+                                <th>Send Date</th>
+                                <th>Recipient</th>
+                                <th>Details</th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                //var projectUsers = item.Users.Select(u => u.DisplayName);
+
+                                <tr class="gradeX">
+
+
+                                    
+                                    <td>@Html.DisplayFor(modelItem => item.Ticket.Title)</td>
+
+                                    <td>@Html.DisplayFor(modelItem => item.Property)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Created)</td>
+
+                                    <td>
+                                        @if (item.RecipientUserId == null)
+                                        {
+                                            @Html.Label("Ticket Unassigned")
+                                        }
+                                        else
+                                        {
+
+                                            @UserHelper.GetDisplayNameFromId(item.RecipientUserId)
+                                        }
+                                    </td>
+
+                                    <td>@Html.DisplayFor(modelItem => item.NotificationDetail)</td>
+
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- page end-->
+
+
+        </div><!-- /row -->
+
+    </section><! --/wrapper -->
+</section><!-- /MAIN CONTENT -->
+
+
+
+
+@section scripts {
+
+    <script>
+        $('.DTable').DataTable();
+    </script>
+
+
+
+}
